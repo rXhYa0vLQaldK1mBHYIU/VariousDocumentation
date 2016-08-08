@@ -1,13 +1,15 @@
 ### FreeNAS Setup ###
-The purpose of this guide is to set out instructions for:  
-1. Installing FreeNAS and setting basic configuration required for basic filesharing through CIFS.
+The purpose of this guide is to set out instructions for:
+1. Installing FreeNAS and setting basic configuration required for basic file-sharing through CIFS.
 2. Install a BSD Jail to hold Transmission and Flexget
 3. Setup configuration for storage and file-sharing of the Jail
 
-#### Deploy FreeNAS to your server environment:
-	1.1 Use Win32 Disk Imager to burn the .iso file of FreeNAS to a USB Memory Stick
-	1.2 Boot the server from that USB and follow on-screen instructions to install FreeNAS on a second memory stick.
-	1.3 Ensure BIOS settings allow booting from USB as the second memory stick will permanently host the O/S.
+#### Chapter 1: Deployment of FreeNAS ####
+1. Use Win32 Disk Imager to burn the .iso file of FreeNAS to a USB Memory Stick
+2. Boot the machine from that USB and follow on-screen instructions to install FreeNAS on a second memory stick.
+> The second memory stick will be the production storage for the operating system. The first memory stick can be repurposed after installation.
+
+1.3 Ensure BIOS settings allow booting from USB as the second memory stick will permanently host the O/S.
 	1.4 If you are installing on headless server, connect a screen for the installation part.
 	1.5 As soon as installation finishes, configure network interfaces to use DHCP.
 
