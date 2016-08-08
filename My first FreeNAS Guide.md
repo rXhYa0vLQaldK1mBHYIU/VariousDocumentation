@@ -8,6 +8,7 @@ The purpose of this guide is to set out instructions for:
 1. Use Win32 Disk Imager to burn the .iso file of FreeNAS to a USB Memory Stick
 2. Boot the machine from that USB and follow on-screen instructions to install FreeNAS on a second memory stick.
 > The second memory stick will be the production storage for the operating system. The first memory stick can be repurposed after installation.
+
 3. Ensure BIOS settings allow booting from USB as the second memory stick will permanently host the O/S.
 	1.4 If you are installing on headless server, connect a screen for the installation part.
 	1.5 As soon as installation finishes, configure network interfaces to use DHCP.
