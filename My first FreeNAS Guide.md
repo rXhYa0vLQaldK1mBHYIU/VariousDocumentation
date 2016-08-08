@@ -7,20 +7,22 @@ The purpose of this guide is to set out instructions for:
 #### Chapter 1: Deployment of FreeNAS ####
 1. Use Win32 Disk Imager to burn the .iso file of FreeNAS to a USB Memory Stick
 2. Boot the machine from that USB and follow on-screen instructions to install FreeNAS on a second memory stick.
-> The second memory stick will be the production storage for the operating system. The first memory stick can be repurposed after installation.
+>The second memory stick will be the production storage and will host the actual operating system. The first memory stick can be repurposed after installation.
 
-3. Ensure BIOS settings allow booting from USB as the second memory stick will permanently host the O/S.
-	1.4 If you are installing on headless server, connect a screen for the installation part.
-	1.5 As soon as installation finishes, configure network interfaces to use DHCP.
+ >Ensure BIOS settings allow booting from USB.
 
-2. Access FreeNAS WebGUI to begin configuration.
-	2.1. Email configuration:	smtp.gmail.com:587 | TLS
-	2.2. Enable 2-step verification on gmail and generate an App Specific password for FreeNAS.
-	2.3. Configure Storage:
-		2.3.1. Create a Jail specific dataset (say: /mnt/volume1/jail_ds)
-		2.3.2. Enable compression at default lz4 | turn off dedup and atime
-		2.3.3. Create a dataset which will hold your downloads and data (say: /mnt/volume1/data)
-	2.4. Configure Network:
+ >If you are installing on headless server, connect a screen for the installation part. I hove not yet found a way to bypass this requirement.
+
+3. Follow on-screen instructions to complete the installation.
+> Under a home-setup it may be preferable to configure network interfaces to use DHCP.
+
+4. Access FreeNAS WebGUI to begin configuration.
+ 1. To enable gmail integration, configure smtp.gmail.com:587 to use TLS and enable if 2-step verification is enabled on gmail (recommended) generate an Application-Specific password for explicit use by FreeNAS.
+ 2. Configure Storage as follows:
+		1. Create a Jail specific dataset (say: /mnt/volume1/jail_ds)
+		2. Enable compression at default lz4 | turn off dedup and atime
+		3. Create a dataset which will hold your downloads and data (say: /mnt/volume1/data)
+5. Configure Network:
 		2.4.1. Set domain, to your preferred domain name and define IPv4 Gateway and DNS
 		2.4.2. Under interfaces configure your network card to use DHCP and IPv4
 	2.5. Configure Services:
