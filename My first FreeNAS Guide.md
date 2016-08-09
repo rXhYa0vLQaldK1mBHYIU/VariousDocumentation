@@ -39,7 +39,8 @@ The purpose of this guide is to set out instructions for:
 8. Configure services as follows:  
  * Turn on CIFS and SSH;
  * Set SSH to allow root login (CIFS will be configured later).
- * Create a new Jail and allocate the destination storage (i.e. the location within the Jail) whereas the source of the storage was created above.  
+ * Create a new Jail and allocate the destination storage (i.e. the location within the Jail) whereas the source of the storage was created above.
+   
   > The name given to the Jail cannot be changed afterwards. Example locations as used in the above examples:  
   > Source: ``/mnt/volume1/my-main-dataset``  
   > Destination: ``/mnt/volume1/my-jail-dataset/usr/local/etc/transmission/home``
