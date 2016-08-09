@@ -46,57 +46,64 @@ The purpose of this guide is to set out instructions for:
  > Destination: ``/mnt/volume1/my-jail-dataset/usr/local/etc/transmission/home``
 
 #### Chapter 2: Transmission and Flexget configuration ####
+FreeNAS plugins natively support Transmission but in this workcase we will be creating a Jail to install both Transmission and Flexget directly from the repositories.
 
-1.  Configure the Jail to run transmission and flexget
+1.  Prepare the Jail
 >Note: use ``pkg install nano`` and use ``setenv VISUAL /usr/local/bin/nano`` to replace ``vi`` with ``nano``.  
 
   1. Set up direct SSH access to the Jail by editing ``sshd_enable="NO"`` to ``"YES"`` in ``/etc/rc.conf``. Start the SSHD with ``service sshd start``. Note: also run ``./sshd start`` in ``/etc/rc.d/``. Follow instructions in [freenas documentation](http://doc.freenas.org/9.3/freenas_jails.html#accessing-a-jail-using-ssh "instructions to accessing-a-jail-using-ssh") for more details.
 
   2. Enable root login by editing ``/etc/ssh/sshd_config`` and setting ``#PermitRootLogin no`` to ``PermitRootLogin yes`` and restart ``sshd`` by ``service sshd restart``.
 
-  Use passwd to set a password for root. 3.1.5. Update
-    pkg before anything: pkg clean \# cleans /var/cache/pkg/ rm -rf
-    /var/cache/pkg/\* \# just remove it all pkg update -f \# forces
-    update of repository catalog rm /var/db/pkg/repo-\*.sqlite \#
-    removes all remote repository catalogs pkg bootstrap -f \# forces
-    reinstall of pkg 3.1.6. Install Transmission, Flexget and
-    dependancies pkg upgrade -y pkg install -y net/py-urllib3
-    databases/py-sqlite3 devel/py-pip rar unrar nano pkg install -y
-    transmission-daemon pip install --upgrade pip pip install --upgrade
-    setuptools pip install flexget pip install --upgrade flexget pip
-    install transmissionrpc pip install --upgrade transmissionrpc 3.1.7
-    Start and stop Transmission to create configuration files
-    /usr/local/etc/rc.d/transmission onestart |
-    /usr/local/etc/rc.d/transmission stop 3.1.8. Configure settings.json
-    in /usr/local/etc/transmission/home Note: Download location should
-    be /usr/local/etc/transmission/home/Downloads 3.1.9. Set
-    transmission\_enable="YES" in /etc/rc.conf to enable start up on
-    every boot 3.1.10.Configure config.yml Flexget in /root/.flexget/
-    3.1.11.Add flexget to crontab using crontab -u root -e and adding
-    <'@reboot> /usr/local/bin/flexget daemon start -d' Note: If for some
-    reason you need to start fresh with Flexget use: 'flexget database
-    reset --sure'
-9.  Share the completed downloads data from the Jail over the
-    network 4.1. Create a new 'transmission' user / group in FreeNAS.
-    Set the user and group ID in FreeNAS to be precisely identical to
-    the IDs used in the Jail 4.2. Create a 'guest' user and add it to
-    the group 'guest'. Disable password login and add auxiliary group
-    the 'transmission' group. 4.3. Create a new share for the path
-    '/mnt/volume1/data/Downloads', set allow guest access and default
-    permissions. 4.4. Configure Services&gt;CIFS to use the
-    guest account.
-10. House keeping 5.1. disable password login for transmission
-    user. 5.2. enable ssh authentication (create key pairs and add to
-    user profile the public key - private key stays out of server) 5.3.
-    the public key needs to be copied to the jail (remember to conver
-    putty generated key to openssh format) 5.4. the conversion is best
-    done using VI editor (Ctrl + I, Shift + J) Note:
-    <https://code.google.com/p/transmisson-remote-gui/> is the best ever
-    interface to manage your Transmission downloader on the server Note:
-    This guide is really good
-    <https://forums.freenas.org/index.php?threads/seting-up-freenas-9-2-0-with-transmission-and-couchpotato-as-a-dlna-server.17165/>
-    Note: Use nano /etc/passwd and nano /etc/group to determine user and
-    group ID Note: Use which flexget to determine working directory
-    Note: Use killall -HUP transmission-da to force stop transmission
-    when you want to reload settings Note: jls, will show a list of all
-    jails | use jexec &lt;\#&gt; tcsh to enter by sshd
+  3. Use ``passwd`` to set a password for root user.
+
+  4. Update ``pkg`` before anything as follows:  
+     * run ``pkg clean`` to clean ``/var/cache/pkg/``. Use ``rm -rf /var/cache/pkg/*`` to just remove it all.
+     * then use ``pkg update -f`` to force an update of the repository catalog ``rm /var/db/pkg/repo-\*.sqlite`` will remove all remote repository catalogs.
+     * to force reinstall of ``pkg`` use ``pkg bootstrap -f ``
+     * ``pkg upgrade -y``
+
+2. Install **Transmission** and **Flexget**
+
+ * Install dependencies ``pkg install -y net/py-urllib3 databases/py-sqlite3 devel/py-pip rar unrar``
+ > Try without above steps first as my guide may need some updating to remove redundant steps.
+ * Install **transmission** with ``pkg install -y transmission-daemon``
+ * Upgrade pip with ``pip install --upgrade pip``
+ * Upgrade setuptools with  ``pip install --upgrade setuptools``
+ * Install **flexget** with ``pip install flexget``
+ > To ensure latest version of **flexget** is installed use ``pip install --upgrade flexget``
+ * Install the rpc element of **transmission** with ``pip install transmissionrpc``
+ > To ensure latest version of **transmission** use ``pip install --upgrade transmissionrpc``
+ * Start and stop **transmission** to create configuration files. Start with ``/usr/local/etc/rc.d/transmission onestart`` and stop with ``/usr/local/etc/rc.d/transmission stop``
+
+3. Configure **transmission** parameters and locations
+
+ * First look into ``settings.json`` found in ``/usr/local/etc/transmission/home``
+ > Download location should be something like ``/usr/local/etc/transmission/home/Downloads``
+ * Set ``transmission_enable="YES"`` in ``/etc/rc.conf`` to enable start up on every boot
+
+ * Configure other settings as needed.
+
+4. Configure **flexget** parameters.
+ * Use the **flexget cookbook** to define ``config.yml`` in ``/root/.flexget/``
+ > The flexget cookbook is a collection of scripts which when used together form a recipe. The config file contains these recipes.
+ * Add **flexget** to **crontab** using ``crontab -u root -e`` and add ``<'@reboot> /usr/local/bin/flexget daemon start -d'``
+> To start fresh with Flexget use: ``flexget database
+    reset --sure``
+
+5. Share the completed downloads data from the Jail over the network and set user permissions.
+    * Create a new ``transmission`` user / group in FreeNAS and disable password login.
+    * Set the user and group ID in FreeNAS to be precisely identical to the IDs used within the Jail.
+    > Use ``nano /etc/passwd`` and ``nano /etc/group`` to determine user and group ID.
+    * Create a ``guest`` user (if it does not already exist) and add it to the group ``guest``. Disable password login and add as an _auxiliary group_ the ``transmission`` group.
+    * Create a new share for the path ``/mnt/volume1/data/Downloads`` (or similar) and set to _allow guest access_ with the default permissions.
+    * Configure in services the CIFS shares to use the guest account.
+
+6. Housekeeping (optional steps)
+ * Enable ssh authentication to both the **FreeNAS** instance and the **Jail**. Key pairs will need to be created and the public key added to the user profile (root in this case). The private key stays out of server and will be only needed by the client that will connect remotely.
+ > The public key needs to be copied to the jail (remember that if you will be using **PuTTY** to generate keys, the public key needs to be copied from the dialogue (as opposed to being saved).
+ * Get **Transmission** remote GUI from [here](https://code.google.com/p/transmisson-remote-gui/ 'the best remote for transmission').
+ * This [guide](https://forums.freenas.org/index.php?threads/seting-up-freenas-9-2-0-with-transmission-and-couchpotato-as-a-dlna-server.17165/'setting up freenas with transmission') is really good.
+ * Use ``which flexget`` to determine working directory
+ * Use ``killall -HUP transmission-daemon`` to force stop transmission when you want to reload settings
+ * Use ``jls`` to get a list of all jails and use ``jexec`` to access the jail through the FreeNAS instance by ``sshd``.
