@@ -40,10 +40,10 @@ The purpose of this guide is to set out instructions for:
  * Turn on CIFS and SSH;
  * Set SSH to allow root login (CIFS will be configured later).
  * Create a new Jail and allocate the destination storage (i.e. the location within the Jail) whereas the source of the storage was created above.
-   
-  > The name given to the Jail cannot be changed afterwards. Example locations as used in the above examples:  
-  > Source: ``/mnt/volume1/my-main-dataset``  
-  > Destination: ``/mnt/volume1/my-jail-dataset/usr/local/etc/transmission/home``
+
+    > The name given to the Jail cannot be changed afterwards. Example locations as used in the above examples:  
+    > Source: ``/mnt/volume1/my-main-dataset``  
+    > Destination: ``/mnt/volume1/my-jail-dataset/usr/local/etc/transmission/home``
 
 #### Chapter 2: Transmission and Flexget configuration ####
 FreeNAS plugins natively support Transmission but in this workcase we will be creating a Jail to install both Transmission and Flexget directly from the repositories.
@@ -77,11 +77,9 @@ FreeNAS plugins natively support Transmission but in this workcase we will be cr
  * Start and stop **transmission** to create configuration files. Start with ``/usr/local/etc/rc.d/transmission onestart`` and stop with ``/usr/local/etc/rc.d/transmission stop``
 
 3. Configure **transmission** parameters and locations
-
  * First look into ``settings.json`` found in ``/usr/local/etc/transmission/home``
- > Download location should be something like ``/usr/local/etc/transmission/home/Downloads``
+    > Download location should be something like ``/usr/local/etc/transmission/home/Downloads``
  * Set ``transmission_enable="YES"`` in ``/etc/rc.conf`` to enable start up on every boot
-
  * Configure other settings as needed.
 
 4. Configure **flexget** parameters.
