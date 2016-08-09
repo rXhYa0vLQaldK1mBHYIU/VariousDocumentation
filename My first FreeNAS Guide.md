@@ -39,11 +39,10 @@ The purpose of this guide is to set out instructions for:
 8. Configure services as follows:  
  * Turn on CIFS and SSH;
  * Set SSH to allow root login (CIFS will be configured later).
- * Create a new Jail and allocate the destination storage (i.e. the location within the Jail) whereas the source of the storage was created above.
- > The name given to the Jail cannot be changed afterwards.
- > Example locations as used in the above examples:  
- > Source: ``/mnt/volume1/my-main-dataset``  
- > Destination: ``/mnt/volume1/my-jail-dataset/usr/local/etc/transmission/home``
+ * Create a new Jail and allocate the destination storage (i.e. the location within the Jail) whereas the source of the storage was created above.  
+  > The name given to the Jail cannot be changed afterwards. Example locations as used in the above examples:  
+  > Source: ``/mnt/volume1/my-main-dataset``  
+  > Destination: ``/mnt/volume1/my-jail-dataset/usr/local/etc/transmission/home``
 
 #### Chapter 2: Transmission and Flexget configuration ####
 FreeNAS plugins natively support Transmission but in this workcase we will be creating a Jail to install both Transmission and Flexget directly from the repositories.
